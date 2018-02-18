@@ -5,8 +5,8 @@ dnl This configure.ac script was created for Autoconf 2.69, but I
 dnl tried it with one as old as 2.61, and that seemed to work fine.
 
 AC_PREREQ([2.69])
-AC_INIT([klh10], [2.0k-Rhialto], [https://github.com/Rhialto/klh10],
-	[], [https://github.com/Rhialto/klh10])
+AC_INIT([klh10], [2.0k-Rhialto], [https://github.com/PDP-10/klh10],
+	[], [https://github.com/PDP-10/klh10])
 AC_CONFIG_SRCDIR([src/klh10.h])
 AC_CONFIG_HEADERS([src/config.h])
 
@@ -34,6 +34,22 @@ do
     esac
 done
 CFLAGS="$NEWCFLAGS -g3 -O3"
+
+# -------------------------------------------------------------------------
+# Check whether we want LNX support
+# -------------------------------------------------------------------------
+
+AC_ARG_ENABLE(lnx,
+    AS_HELP_STRING([--enable-lnx],[enable lnx networking (default on) when it cannot be found]))
+
+case "${with_lnx}" in
+    yes | "") 
+	 AC_DEFINE(KLH10_NET_LNX, 1, [Set to 0 to enable LNX networking])
+	 AC_MSG_NOTICE([Compiling with LNX support]) ;;
+    no)  AC_DEFINE(KLH10_NET_LNX, 0, [Set to 0 to disable LNX networking])
+	 AC_MSG_NOTICE([Compiling without LNX support]) ;;
+    *)   AC_MSG_ERROR([bad value ${enable_lnx} for --enable-lnx]) ;;
+esac
 
 # -------------------------------------------------------------------------
 # Check whether we want VDE support
